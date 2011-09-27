@@ -13,7 +13,7 @@ PS1="$status_style"'$fill \t\n'"$prompt_style$OLD_PS1$command_style"
 
 # Reset color for command output
 # (this one is invoked every time before a command is executed):
-trap 'echo -ne "\e[0m"' DEBUG
+trap 'echo -ne "\[\033[00m\]"' DEBUG
 
 
 function prompt_command {
