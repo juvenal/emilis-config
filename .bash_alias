@@ -1,0 +1,44 @@
+# .bash_alias
+
+# enable color support of ls and also add handy aliases
+if [[ "${TERM}" != "dumb" ]]; then
+	alias ls='ls --color=auto'
+	alias grep='grep --color=auto'
+	alias fgrep='fgrep --color=auto'
+	alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias l='ls -CF'
+alias ls='ls -G'
+alias ll='ls -l'
+alias la='ll -A'
+alias lr='ll -tr'
+alias lla='ls -al'
+alias df='df -h'
+alias du='du -h'
+alias dir='ls -l'
+alias vdir='ls -l'
+alias ltr='ls -ltr'
+alias ltra='ls -altr'
+alias grep='grep --color'
+alias rebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain system -domain user'
+
+# some cd aliases
+alias ..='cd ..'
+
+# Small functions
+# ===============
+# Start logging terminal output
+record() {
+	if [[ ! -s "${HOME}/Documents/ShellLogs" ]]; then
+		mkdir "${HOME}/Documents/ShellLogs/"
+	fi
+	script -a "${HOME}/Documents/ShellLogs/session-$(date "+%m-%d-%y %H;%M.%S").log"
+}
+
+# Create folder and change to it
+mkcd() {
+	mkdir -p "${*}"
+	cd "${*}"
+}

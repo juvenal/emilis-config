@@ -1,0 +1,5 @@
+# .bash_completion
+#
+
+# Add git's completion functions
+source /usr/local/share/git/contrib/completion/git-completion.bash

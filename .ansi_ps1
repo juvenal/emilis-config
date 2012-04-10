@@ -1,41 +1,86 @@
-# Fill with minuses
-# (this is recalculated every time the prompt is shown in function prompt_command):
-fill="--- "
+# .bash_ps1
+#
+#
+#
+#
+#
+#
 
-reset_style='\[\033[00m\]'
-status_style=$reset_style'\[\033[0;90m\]' # gray color; use 0;37m for lighter color
-prompt_style=$reset_style
-command_style=$reset_style'\[\033[1;29m\]' # bold black
+# Define the string fill function
+function lineFill() {
+	fill=""
+	size=$(( ${COLUMNS} - 9 ))
+	while [[ ${size} -gt 0 ]]; do
+		fill="${1}${fill}"
+		size=$(( ${size} - 1 ))
+	done
+	printf "%s" ${fill}
+}
+
+# Include .ansi for basic definitions.
+if [[ -r ~/.ansi ]]; then
+	source ~/.ansi
+fi
+
+# Only define the colors if color display is supported
+if [[ "${color_prompt}" == "yes" ]]; then
+	resetStyle=$(setColor)
+	fillStyle=${resetStyle}$(setColor ${normal} ${white})
+	userStyle=${resetStyle}$(setColor ${normal} ${green})
+	hostStyle=${resetStyle}$(setColor ${normal} ${blue})
+	folderStyle=${resetStyle}$(setColor ${normal} ${cyan})
+	branchStyle=${resetStyle}$(setColor ${normal} ${magenta})
+	separatorStyle=${resetStyle}$(setColor ${bold} ${yellow})
+	delimiterStyle=${resetStyle}$(setColor ${bold} ${red})
+fi
+
+# Work with isolated prompt components
+part1=${delimiterStyle}'['${userStyle}'\u'${separatorStyle}'@'${hostStyle}'\h'
+part2=${folderStyle}'\W'${branchStyle}'$(__git_ps1 " (%s)")'
+part3=${delimiterStyle}']$'${resetStyle}
+prompt="${part1} ${part2}${part3} "
+
+# Set the final prompt
+export PROMPT_COMMAND="lineFill '-'"
+export PS1="${fillStyle}${fill} \t\n${prompt}"
+
+# Prepare the fill line to separate commands with minuses (-)
+# (this is recalculated every time the prompt is shown in function prompt_command):
+#fill=$(lineFill "-")
+
+
+#reset_style=setColor
+#status_style=${reset_style}'\[\033[0;90m\]' # gray color; use 0;37m for lighter color
+#prompt_style=${reset_style}
+#command_style=${reset_style}'\[\033[1;29m\]' # bold black
 # Prompt variable:
 
-OLD_PS1="$PS1"
-PS1="$status_style"'$fill \t\n'"$prompt_style$OLD_PS1$command_style"
+#OLD_PS1="${PS1}"
+#PS1="${status_style}"'${fill} \t\n'"${prompt_style}${OLD_PS1}${command_style}"
 
 # Reset color for command output
 # (this one is invoked every time before a command is executed):
-trap 'echo -ne "\[\033[00m\]"' DEBUG
+#trap 'echo -ne "\[\033[00m\]"' DEBUG
 
 
-function prompt_command {
-
-    # create a $fill of all screen width minus the time string and a space:
-    let fillsize=${COLUMNS}-9
-    fill=""
-    while [ "$fillsize" -gt "0" ]
-    do
-        fill="-${fill}" # fill with underscores to work on 
-        let fillsize=${fillsize}-1
-    done
-
-    # If this is an xterm set the title to user@host:dir
-    case "$TERM" in
-    xterm*|rxvt*)
-        bname=`basename "${PWD/$HOME/~}"`
-        echo -ne "\033]0;${bname}: ${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"
-        ;;
-    *)
-        ;;
-    esac
-  
-}
-PROMPT_COMMAND=prompt_command
+#function prompt_command {
+#    # create a $fill of all screen width minus the time string and a space:
+#    fillsize=$(( ${COLUMNS} - 9 ))
+#    fill=""
+#    while [[ ${fillsize} -gt 0 ]]; do
+#        fill="-${fill}" # fill with underscores to work on 
+#        fillsize=$(( ${fillsize} - 1 ))
+#    done
+#
+#    # If this is an xterm set the title to user@host:dir
+#    case "${TERM}" in
+#    	xterm*|rxvt*)
+#        	bname=$(basename "${PWD/${HOME}/~}")
+#        	echo -ne "\033]0;${bname}: ${USER}@${HOSTNAME}: ${PWD/${HOME}/~}\007"
+#        	;;
+#    	*)
+#        	;;
+#    esac
+#}
+#
+#PROMPT_COMMAND=prompt_command
