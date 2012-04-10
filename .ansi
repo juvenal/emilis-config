@@ -29,17 +29,17 @@ setColor() {
 	# Set according to parameters
 	if [[ ! -z ${1} ]] && [[ -z ${2} ]] && [[ -z ${3} ]]; then
 		attr=${1}
-		printf '\033[%sm' ${attr}
+		printf '\[\033[%sm\]' ${attr}
 	elif [[ ! -z ${1} ]] && [[ ! -z ${2} ]] && [[ -z ${3} ]]; then
 		attr=${1}
 		fore=$(( ${foreground} + ${2} ))
-		printf '\033[%s;%sm' ${attr} ${fore}
+		printf '\[\033[%s;%sm\]' ${attr} ${fore}
 	elif [[ ! -z ${1} ]] && [[ ! -z ${2} ]] && [[ ! -z ${3} ]]; then
 		attr=${1}
 		fore=$(( ${foreground} + ${2} ))
 		back=$(( ${background} + ${3} ))
-		printf '\033[%s;%s;%sm' ${attr} ${fore} ${back}
+		printf '\[\033[%s;%s;%sm\]' ${attr} ${fore} ${back}
 	else
-		printf '\033[0m'
+		printf '\[\033[0m\]'
 	fi
 }
