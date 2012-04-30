@@ -34,7 +34,7 @@ record() {
 	if [[ ! -s "${HOME}/Documents/ShellLogs" ]]; then
 		mkdir "${HOME}/Documents/ShellLogs/"
 	fi
-	script -a "${HOME}/Documents/ShellLogs/session-$(date "+%m-%d-%y %H;%M.%S").log"
+	script -a "${HOME}/Documents/ShellLogs/ScriptSession-$(date "+%m-%d-%y %H;%M.%S").log"
 }
 
 # Create folder and change to it

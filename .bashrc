@@ -59,17 +59,16 @@ if [[ -f ~/.bash_alias ]]; then
 fi
 
 # Enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [[ -f /etc/bash_completion ]]; then
-	# Load default completions if defined
-    source /etc/bash_completion
-elif [[ -f ~/.bash_completion ]]; then
-	# Load personal completions if defined
-	source ~/.bash_completion
+# this, if it's already enabled in /etc/bashrc and/or /etc/profile
+# Load personal completions if defined
+if [[ -f ~/.bash_completion ]]; then
+    source ~/.bash_completion
+# Otherwise, load defaults
+elif [[ -f /etc/bash_completion ]]; then
+	source /etc/bash_completion
 fi
 
-# Set the tweaked, custom prompt.
+# Finally, set the tweaked, custom prompt if defined.
 if [[ -f ~/.bash_ps1 ]]; then
 	source ~/.bash_ps1
 fi

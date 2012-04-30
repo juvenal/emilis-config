@@ -8,13 +8,27 @@
 
 # Define the string fill function
 function lineFill() {
-	fill=""
-	size=$(( ${COLUMNS} - 9 ))
+	# Set the fill line
+	local size=$(( ${COLUMNS} - 9 ))
+	export fill=""
 	while [[ ${size} -gt 0 ]]; do
 		fill="${1}${fill}"
 		size=$(( ${size} - 1 ))
 	done
+
+	# If this is an xterm set the title to user@host:dir
+	case "${TERM}" in
+		xterm*|rxvt*)
+			local bname=$(basename "${PWD/${HOME}/~}")
+			local title="\033]0;${bname}: ${USER}@${HOSTNAME}: ${PWD/${HOME}/~}\007"
+			;;
+		*)
+			;;
+	esac
+
+	# Output both 
 	printf "%s" ${fill}
+	#printf "%s" ${title}
 }
 
 # Include .ansi for basic definitions.
@@ -41,7 +55,7 @@ part3=${delimiterStyle}']$'${resetStyle}
 prompt="${part1} ${part2}${part3} "
 
 # Set the final prompt
-export PROMPT_COMMAND="lineFill '-'"
+export PROMPT_COMMAND="lineFill '-'; ${PROMPT_COMMAND}"
 export PS1="${fillStyle}${fill} \t\n${prompt}"
 
 # Prepare the fill line to separate commands with minuses (-)
